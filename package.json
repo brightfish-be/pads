@@ -1,0 +1,18 @@
+{
+  "name": "pads",
+  "version": "1.0.0",
+  "description": "Dependency-free and lightweight on-screen keyboards",
+  "main": "pads.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rollup -c",
+    "watch": "rollup -c -w"
+  },
+  "author": "",
+  "license": "GPL-3.0+",
+  "devDependencies": {
+    "rollup": "^0.57.1",
+    "rollup-plugin-replace": "^2.0.0",
+    "rollup-plugin-uglify": "^3.0.0"
+  }
+}

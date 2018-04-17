@@ -1,0 +1,40 @@
+
+/*
+ |--------------------------------------------------------------------------
+ | Function keys labels
+ |--------------------------------------------------------------------------
+ |
+ |
+ */
+
+.key-backspace:after {
+    content: '\2190 '; /* `\232B` is not rendered on android */
+}
+.key-caps:after {
+    content: '\21E7';
+}
+.key-enter:after {
+    content: '\21B5';
+}
+.key-close:after {
+    content: '\00D7';
+}
+
+
+/*
+ |--------------------------------------------------------------------------
+ | Layout keys labels
+ |--------------------------------------------------------------------------
+ |
+ |
+ */
+
+.key-normal:after {
+    content: 'ABC';
+}
+.key-num:after {
+    content: '123';
+}
+.key-alt:after {
+    content: '#+=';
+}

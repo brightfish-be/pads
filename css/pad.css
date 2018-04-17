@@ -1,0 +1,133 @@
+
+/*
+ |--------------------------------------------------------------------------
+ | Pad global
+ |--------------------------------------------------------------------------
+ |
+ |
+ */
+
+.pad-keys,
+.pad-keys * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.pad-keys {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: inherit;
+    width: 560px;
+    margin: 0 auto;
+    text-align: right;
+    overflow: auto;
+}
+.key,
+.pad-space {
+    border: 3px solid;
+    display: table-cell;
+    width: 50px; height: 50px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.key {
+    color: inherit;
+    margin: 3px;
+    line-height: 1.5;
+    text-align: center;
+    font-size: 32px;
+}
+
+
+
+
+.pad-upper .key {
+    text-transform: uppercase;
+}
+.key.active,
+.key:active {
+    background: #fff;
+    color: #182424;
+}
+
+.pad-upper .key {
+    text-transform: uppercase;
+}
+
+.pad-field-key {
+    display: block;
+    color: inherit;
+    width: 300px;
+    margin: 0 auto 50px auto;
+    background: none;
+    border: none;
+    border-bottom: 2px solid;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.pad-row {
+    display: table;
+    width: 100%;
+}
+
+/*
+ |--------------------------------------------------------------------------
+ | Pad key layout
+ |--------------------------------------------------------------------------
+ |
+ |
+ */
+
+
+
+
+/*
+.key-q,
+.key-a,
+.key-caps {
+    clear: left;
+}
+.key-a {
+    margin-left: 28px;
+}
+.key-caps {
+    margin-right: 28px;
+}
+.key-backspace {
+    margin-left: 34px;
+}*/
+
+
+
+
+
+
+
+
+
+/*
+.pad-submit {
+    font-weight: 700;
+    opacity: .5;
+    font-size: 22px;
+    line-height: 2.1;
+}
+.pad-backspace:after {
+    content: " ";
+    display: inline-block;
+    width: 13px; height: 13px;
+    border-top: 4px solid;
+    border-left: 4px solid;
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    margin-bottom: 6px;
+}
+.key.backspace {
+    text-align: center;
+    text-indent: 8px;
+}
+*/
