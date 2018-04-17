@@ -1,0 +1,9 @@
+
+body, html {
+    margin: 0; padding: 0;
+    background: #182424;
+    color: #fff;
+}
+.wrap {
+    padding: 150px 20px 0 20px;
+}

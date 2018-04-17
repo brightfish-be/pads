@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pads</title>
+    <link href="css/demo.css" rel="stylesheet"/>
+    <link href="css/function-keys.css" rel="stylesheet"/>
+    <link href="css/pad.css" rel="stylesheet"/>
+</head>
+<body>
+<div class="wrap">
+    <input class="pad-field-key" autocomplete="false" spellcheck="false"/>
+    <!--<input class="pad-field-num" autocomplete="false" spellcheck="false"/>-->
+</div>
+<script src="dist/pads.js"></script>
+<script>
+    var k = new pads.KeyPad({
+        maxLength: 100,
+        onError: function(msg) {
+            console.error(msg)
+        }
+    });
+
+    console.log(k);
+
+    /*var n = new pads.NumPad({
+        maxLength: 5,
+        onError: function(msg) {
+            console.error(msg)
+        }
+    });
+    console.log(n);*/
+</script>
+</body>
+</html>
