@@ -59,7 +59,7 @@ Pad.prototype = {
     },
 
     setUpperCase: function (state) {
-        this.setPadClassName('pad-upper', this.isUpper = state);
+        this.setPadClassName('pad-mod-upper', this.isUpper = state);
         return this
     },
 
@@ -112,7 +112,7 @@ Pad.prototype = {
 
     _key: function (value, isModifier) {
         let className = 'class="key key-' + value + '"';
-        return '<div ' + className + ' aria-label="' + value + '">' + (!isModifier ? value : '') + '</div>';
+        return '<div ' + className + ' aria-label="' + value + '"><div>' + (!isModifier ? value : '') + '</div></div>';
     },
 
     _bindPad: function (pad) {
