@@ -3,16 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Pads</title>
-    <link href="css/demo.css" rel="stylesheet"/>
-    <link href="css/function-keys.css" rel="stylesheet"/>
-    <link href="css/pad.css" rel="stylesheet"/>
+    <style>
+        body, html {
+            margin: 0; padding: 0;
+            background: #182424;
+            color: #fff;
+        }
+        .wrap {
+            padding: 150px 20px 0 20px;
+        }
+    </style>
+    <link href="../css/function-keys.css" rel="stylesheet"/>
+    <link href="../css/pad.css" rel="stylesheet"/>
 </head>
 <body>
 <div class="wrap">
     <input class="pad-field-key" autocomplete="false" spellcheck="false"/>
     <!--<input class="pad-field-num" autocomplete="false" spellcheck="false"/>-->
 </div>
-<script src="dist/pads.js"></script>
+<script src="../dist/pads.js"></script>
 <script>
     var k = new pads.KeyPad({
         maxLength: 100,
