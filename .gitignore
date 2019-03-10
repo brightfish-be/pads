@@ -1,5 +1,5 @@
+.swp
 .idea
 .DS_Store
-.swp
 node_modules
-readme.md
+npm-debug.log
