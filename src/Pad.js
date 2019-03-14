@@ -1,3 +1,4 @@
+import polyfills from './polyfills';
 import keyHelpers from './key-helpers';
 import keyboards from './keyboards';
 import helpers from './helpers';
