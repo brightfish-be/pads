@@ -1,92 +1,152 @@
-import helpers from './helpers.js';
+import keyHelpers from './key-helpers';
+import keyboards from './keyboards';
+import helpers from './helpers';
+import events from './events';
 
-const d = document,
+const
+    d = document,
     DEFAULTS = {
-        field: '.pad-field',
-        minLength: 1,
-        maxLength: 10,
-        fnKeys: [
-            {name: 'backspace', text: '&#9003;'},
-            {name: 'enter', text: '&#8629;'},
-            {name: 'close', text: '&#215;'}
-        ],
-        onUpdate: null,
-        onEnter: null,
-        onError: null,
-        onClose: null,
+        root: null,
+        field: null,
+        keyboard: 'email',
+        layout: 'normal',
     };
 
 /**
+ * Pad
+ *
+ * @param {Object} options
  * @constructor
- * @param {object} options
  */
 export default function Pad(options) {
-    let self = this;
+    let self = this,
+        fields = Array.prototype.slice.call(d.querySelectorAll('input.pad-field')),
+        field = options.field ? helpers.getElement(options.field) : fields[0];
 
-    // private options object
-    self._o = Object.assign({}, DEFAULTS, options = options || {});
+    self._o = options = Object.assign({}, DEFAULTS, options || {});
 
-    // elements
-    self.dom = {
-        field: options.field = (typeof self._o.field === 'string' ? d.querySelector(self._o.field) : self._o.field),
-        root: options.root = (options.root ? options.root : helpers.wrap(options.field, 'pad-wrap'))
+    self._dom = {
+        fields: fields,
+        root: options.root ? helpers.getElement(options.root) : helpers.wrap(fields[0], 'pad-wrap'),
+        pad: self._createPadElement()
     };
 
-    // element containing the keyboard,
-    // ``_padElement`` tests for existence of ``pad`` in ``this.dom``
-    self.dom.pad = self._padElement(options.root);
+    self._setState(field, options.keyboard, options.layout);
 
-    // current value of the input field/text area
-    self.current = this.getFieldValue();
+    self._render();
 
-    self.type = options.layout || 'normal';
+    // Cache for user bound events (with `on()`)
+    self._userHandlers = [];
 
-    // todo do not do this on init
-    self.render();
-
-    // bind and stash events for later removal
-    self.handlers = [
-        self._bindFocus(self.dom.field),
-        self._bindPad(self.dom.root)
-    ]
+    // Bind and stash events for later removal
+    self._domHandlers = self._bindFocus(fields);
+    self._domHandlers.push(self._bindKeys(self._dom.root));
 }
 
-Pad.prototype = {
+/**
+ * Add a custom keyboard with its custom key methods
+ * @param {String} name
+ * @param {Object} layouts
+ * @param {Object} methods
+ */
+Pad.addKeyboard = function (name, layouts, methods) {
+    keyboards[name] = layouts;
+    Pad.prototype = Object.assign(Pad.prototype, methods);
+};
 
-    setLayout: function (type) {
-        this.type = type;
-        return this
+
+Pad.prototype = Object.assign({}, keyHelpers, events, {
+
+    /**
+     * Activate the instance for another field, optionally with another keyboard and layout
+     * @param {HTMLInputElement} field
+     * @param {string} keyboard
+     * @param {string} layout
+     * @return {Object}
+     */
+    switchField: function (field, keyboard, layout) {
+        let self = this;
+
+        layout = layout || 'normal';
+        keyboard = keyboard || field.getAttribute('data-pad') || field.type || DEFAULTS.keyboard;
+
+        self._setState(field, keyboard, layout);
+        self._render();
+        self.show();
+        return this;
     },
 
-    setUpperCase: function (state) {
-        this.setPadClassName('pad-mod-upper', this.isUpper = state);
-        return this
+    /**
+     * Modify state properties
+     * @param {HTMLInputElement} field
+     * @param {string} keyboard
+     * @param {string} layout
+     * @private
+     */
+    _setState: function (field, keyboard, layout) {
+        let self = this;
+
+        if (self._dom.field) {
+            self._dom.field.classList.remove('pad-active');
+        }
+
+        field.classList.add('pad-active');
+
+        self._dom.field = field;
+        self.keyboard = keyboard;
+        self.layout = layout;
+        self.current = self.getFieldValue();
+        self.fieldIdx = self._dom.fields.indexOf(field);
     },
 
-    toggleKey: function (key) {
-        return key.classList.toggle('active');
+    /**
+     * Get all layouts of keyboard
+     * @param {string} name
+     * @return {{}}
+     * @private
+     */
+    _getKeyboard: function (name) {
+        return keyboards[name];
     },
 
-    setPadClassName: function(className, state) {
-        this._padElement().classList[state ? 'add' : 'remove'](className);
-        return this
+    /**
+     * Add/remove a class name
+     * @param className
+     * @param state
+     * @private
+     */
+    _setPadClassName: function (className, state) {
+        this._dom.pad.classList[state ? 'add' : 'remove'](className);
     },
 
-    changeLayout: function (btn, name) {
-        this.setUpperCase(false).setLayout(this.toggleKey(btn) ? name : 'normal').render();
+    /**
+     * Switch between layouts of the current keyboard
+     * @param {HTMLDivElement} btn
+     * @param {String} name
+     * @private
+     */
+    _changeLayout: function (btn, name) {
+        this.layout = this.toggleKey(btn) ? name : 'normal';
+        this.toggleUpperCase(false);
+        this._render();
     },
 
-    render: function() {
+    /**
+     * Render the key rows and append them
+     * @return {HTMLDivElement}
+     * @private
+     */
+    _render: function () {
         let self = this,
-            pad = this._padElement(),
-            keyboard = this._o.keyboard[this.type],
+            pad = self._dom.pad,
+            keyboard = self._getKeyboard(self.keyboard)[self.layout],
             html = '';
 
         keyboard.forEach(function (row) {
             html += '<div class="pad-row">';
 
             row.forEach(function (key) {
-                html += key ? self._key(key, self.isModifierKey(key)) : self._keySpacer();
+                html += key ? self._createKey(key, self.isModifierKey(key)) : self._createKeySpacer();
             });
 
             html += '</div>';
@@ -94,150 +154,140 @@ Pad.prototype = {
 
         pad.innerHTML = html;
 
-        if (!pad.parentNode) this.dom.root.appendChild(pad);
+        if (!pad.parentNode) self._dom.root.appendChild(pad);
 
         return pad;
     },
 
-    _padElement: function () {
-        if (this.dom.pad) return this.dom.pad;
+    /**
+     * Creates main element
+     * @return {HTMLDivElement}
+     * @private
+     */
+    _createPadElement: function () {
         let pad = d.createElement('div');
-        pad.className = 'pad-keys';
+        pad.className = 'pad-main';
         return pad;
     },
 
-    _keySpacer: function () {
+    /**
+     * Creates a spacing element
+     * @return {string} HTML
+     * @private
+     */
+    _createKeySpacer: function () {
         return '<span class="pad-space"></span>'
     },
 
-    _key: function (value, isModifier) {
-        let className = 'class="key key-' + value + '"';
-        return '<div ' + className + ' aria-label="' + value + '"><div>' + (!isModifier ? value : '') + '</div></div>';
+    /**
+     * Create a key
+     * @param {String} value
+     * @param {Boolean} isModifier
+     * @return {string} HTML
+     * @private
+     */
+    _createKey: function (value, isModifier) {
+        let className = 'class="pad-key pad-key-' + value + '"';
+        return '<div ' + className + ' aria-label="' + value + '">' + (!isModifier ? value : '') + '</div>';
     },
 
-    _bindPad: function (pad) {
-        let self = this,
-            handler = function (e) {
-                let value = e.target ? e.target.getAttribute('aria-label') : null;
-
-                if (!value) return;
-                if (helpers.isFn(self[value])) return self[value](e, value);
-
-                self.setValue(value);
-
-                e.stopPropagation();
-            }.bind(self);
-
-        pad.addEventListener('click', handler, false);
-
-        return {
-            el: pad,
-            fn: handler,
-            evt: 'click'
-        }
+    /**
+     * Return the input field the instance is currently linked to
+     * @return {null|HTMLInputElement}
+     */
+    getField: function () {
+        return this._dom.field;
     },
 
-    _bindFocus: function (input) {
-        let self = this,
-            handler = function () {
-                self.show();
-            }.bind(self);
-
-        input.addEventListener('focusin', handler, false);
-
-        return {
-            el: input,
-            fn: handler,
-            evt: 'click'
-        }
+    /**
+     * Return the next field in line (all `.pad-field` are cached in the instance)
+     * @return {HTMLInputElement}
+     */
+    getNextField: function () {
+        let next = ++this.fieldIdx;
+        next = next >= this._dom.fields.length ? 0 : next;
+        return this._dom.fields[next]
     },
 
-    setValue: function (attr) {
+    /**
+     * Concatenate the pressed key value with the current string
+     * @param {String} attr
+     * @return void
+     */
+    appendValue: function (attr) {
         let current = this.getFieldValue();
-
-        if (!this.validate(current + attr)) return;
 
         if (this.isUpper) attr = attr.toUpperCase();
 
-        this.setField(current + attr);
+        this.setFieldValue(current + attr);
     },
 
-    validate: function (value) {
-
-        if (value.length < this._o.minLength) {
-            this._fireCB('Error', 'The input value is too short.');
-            return false;
-        }
-
-        if (value.length > this._o.maxLength) {
-            this._fireCB('Error', 'The input value is too long.');
-            return false;
-        }
-
-        return true;
-    },
-
-
-    isModifierKey: function(key) {
-        return helpers.isFn(this[key]);
-    },
-
+    /**
+     * Get the value of the current field
+     * @return {String}
+     */
     getFieldValue: function () {
-        return this.dom.field.value;
+        return this._dom.field.value;
     },
 
-    setField: function (value) {
-        this.dom.field.value = this.current = value.toString();
-        return this._fireCB('Update');
+    /**
+     * Set the value of the current field
+     * @param {String} newValue
+     * @return void
+     */
+    setFieldValue: function (newValue) {
+        if (this._trigger('update', newValue)) {
+            this._dom.field.value = this.current = newValue;
+        }
     },
 
-    backspace: function () {
-        this.setField(this.current.slice(0, -1));
-    },
-
+    /**
+     * Clear the current field's value
+     * @return void
+     */
     clear: function () {
-        return this.setField('');
+        this.setFieldValue('');
     },
 
-    close: function () {
-        this.hide().clear()._fireCB('Close');
-        return this;
-    },
-
-    enter: function () {
-        if (this.validate(this.current)) this._fireCB('Enter');
-    },
-
-    _fireCB: function (fn, param) {
-        fn = this._o['on' + fn];
-        if (fn && helpers.isFn(fn)) fn.call(this, param || this.current, this);
-        return this
-    },
-
+    /**
+     * Show the keyboard
+     * @return void
+     */
     show: function () {
-        this.dom.pad.style.display = 'block';
-        return this
+        this._dom.pad.style.display = 'block';
     },
 
+    /**
+     * Hide the keyboard
+     * @return void
+     */
     hide: function () {
-        this.dom.pad.style.display = 'none';
-        return this
+        this._dom.pad.style.display = 'none';
     },
 
-    destroy: function () {
-        let self = this, i = 0, l = self.handlers.length;
+    /**
+     * Unbind all events and clean up the DOM, optionally empty out the field
+     * @param {Boolean} clearField
+     * @return void
+     */
+    destroy: function (clearField) {
+        let self = this;
 
-        // empty, close and remove the pad element
-        self.close();
-        self.dom.root.removeChild(self.dom.pad);
-
-        // detach events
-        for (i; i < l; i++) {
-            self.handlers[i]['el'].removeEventListener(self.handlers[i]['evt'], self.handlers[i]['fn'], false);
+        if (clearField) {
+            self.clear();
         }
 
-        // release references
-        self.handlers = [];
-        self.dom = self._o = null
-    }
-};
+        // Hide remove the pad element
+        self.hide();
+        self._dom.root.removeChild(self._dom.pad);
+
+        // Detach events
+        self._domHandlers.forEach(function (obj) {
+            obj.el.removeEventListener(obj.evt, obj.fn, true);
+        });
+
+        // Release references
+        self._domHandlers = self._userHandlers = [];
+        self._dom = self._o = null
+    },
+});

@@ -4,54 +4,133 @@
     <meta charset="UTF-8">
     <title>Pads</title>
     <style>
+        * {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
         body, html {
-            margin: 0; padding: 0;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0 2em;
             background: #182424;
             color: #fff;
         }
-        .wrap {
-            padding: 150px 20px 0 20px;
+        header {
+            position: fixed; top: 0; left: 0; z-index: 999;
+            width: 100%;
+            padding: 1em 2em 0 2em;
         }
-        .pad-field-key {
+        header > div {
+            padding-bottom: 1em;
+            border-bottom: 2px solid;
+        }
+        #msg {
+            float: right;
+        }
+        .wrap {
+            padding: 130px 20px 0 20px;
+        }
+        label {
             display: block;
-            color: inherit;
             width: 300px;
             margin: 0 auto 50px auto;
+        }
+        .pad-field {
+            display: block;
+            width: 100%;
+            color: inherit;
             background: none;
-            border: none;
-            border-bottom: 2px solid;
+            border: 2px solid;
             -webkit-appearance: none;
             -moz-appearance: none;
-            appearance: none;
+            padding: .5em;
+            opacity: .5;
+            outline: none;
+        }
+        .pad-field:invalid {
+            border-color: darkred;
+        }
+        .pad-active,
+        .pad-field:focus {
+            opacity: 1;
         }
     </style>
-    <link href="../css/pad.css" rel="stylesheet"/>
-    <link href="../css/key.css" rel="stylesheet"/>
-    <link href="../css/function-keys.css" rel="stylesheet"/>
+    <link href="base.min.css" rel="stylesheet"/>
+    <link href="theme.css" rel="stylesheet"/>
 </head>
-<body>
+<body class="themed">
+<header>
+    <div>
+        Switch to <select class="btn-switch">
+            <option value=".pad-field[type=email]">Field 1</option>
+            <option value=".pad-field[type=number]">Field 2</option>
+        </select>
+        &emsp;
+        Switch theme <select class="btn-switch-theme">
+            <option value="1">Rounded</option>
+            <option value="0">Default</option>
+        </select>
+        <div id="msg"></div>
+    </div>
+</header>
 <div class="wrap">
-    <input class="pad-field-key" autocomplete="false" spellcheck="false"/>
-    <!--<input class="pad-field-num" autocomplete="false" spellcheck="false"/>-->
+    <label>
+        <span>Email:</span>
+        <input class="pad-field" type="email" autocomplete="false" spellcheck="false"/>
+    </label>
+    <label>
+        <span>Number:</span>
+        <input class="pad-field" type="number" autocomplete="false" spellcheck="false"/>
+    </label>
+    <div class="pad-root"></div>
 </div>
-<script src="../dist/pads.js"></script>
+<script src="pads.min.js"></script>
 <script>
-    var k = new pads.KeyPad({
-        maxLength: 100,
-        onError: function(msg) {
-            console.error(msg)
+    var msg = document.getElementById('msg'),
+        pad = new Pad({
+            root: document.querySelector('.pad-root'),
+        });
+
+    pad.on('a', function(value) {
+            console.log('key: "a"', value);
+            return true;
+        })
+        .on('update', function(value) {
+            console.log('Update event', value);
+            if (value.length < 8) {
+                msg.textContent = '';
+                return true;
+            }
+            msg.textContent = 'The input cannot be longer than 7 characters!';
+            return false;
+        })
+        .on('enter', function (value) {
+            console.log('key: "enter"', value);
+            this.next();
+            return false;
+        })
+        .on('close', function (value) {
+            console.log('key: "close"', value);
+            return true;
+        });
+
+    // Adding a custom keyboard with a name, its layouts and methods
+    Pad.addKeyboard('test', {normal: [], alt: []}, {
+        test: function () {
+            console.log('hep');
         }
     });
 
-    console.log(k);
-
-    /*var n = new pads.NumPad({
-        maxLength: 5,
-        onError: function(msg) {
-            console.error(msg)
-        }
+    // Demo field/keyboard switch button
+    document.querySelector('.btn-switch').addEventListener('change', function (e) {
+        pad.switchField(document.querySelector(e.target.value));
     });
-    console.log(n);*/
+
+    // Demo theme switch button
+    document.querySelector('.btn-switch-theme').addEventListener('change', function (e) {
+        document.body.classList[e.target.value === '1' ? 'add' : 'remove']('themed');
+    });
 </script>
 </body>
 </html>

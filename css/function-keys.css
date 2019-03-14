@@ -1,41 +1,41 @@
 
 /*
  |--------------------------------------------------------------------------
- | Function keys labels
+ | Function key labels
  |--------------------------------------------------------------------------
  |
  |
  */
 
-.key-backspace:after {
+.pad-key-backspace:after {
     content: '\2190 '; /* `\232B` is not rendered on android */
 }
-.key-caps:after {
+.pad-key-caps:after {
     content: '\21E7';
 }
-.key-enter:after {
+.pad-key-enter:after {
     content: '\21B5';
 }
-.key-close:after {
+.pad-key-close:after {
     content: '\00D7';
 }
 
 
 /*
  |--------------------------------------------------------------------------
- | Layout keys labels
+ | Layout key labels
  |--------------------------------------------------------------------------
  |
  |
  */
 
-.key-normal:after {
+.pad-key-normal:after {
     content: 'ABC';
 }
-.key-num:after {
+.pad-key-num:after {
     content: '123';
 }
-.key-alt:after {
+.pad-key-alt:after {
     content: '#+=';
 }
 
@@ -48,6 +48,6 @@
  |
  */
 
-.pad-mod-upper {
+.pad-upper {
     text-transform: uppercase;
 }

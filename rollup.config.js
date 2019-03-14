@@ -4,10 +4,13 @@ import uglify from 'rollup-plugin-uglify';
 
 export default [
     {
-        input: 'src/pads.js',
+        input: 'src/Pad.js',
         output: [
-            {file: 'dist/' + pkg.main, format: 'umd', name: pkg.name}
+            {file: pkg.main, format: 'umd', name: 'Pad'}
         ],
+        watch: {
+            exclude: ['node_modules/**']
+        },
         plugins: [
             replace({
                 'const': 'var',

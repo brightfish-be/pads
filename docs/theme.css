@@ -1,0 +1,24 @@
+
+/* 'themed' class is for demo purpose */
+
+.themed .pad-main {
+    border: none;
+}
+.themed .pad-row {
+    display: block;
+    text-align: center;
+    line-height: 2.9;
+}
+.themed .pad-key {
+    display: inline-block;
+    border: 2px solid;
+    border-radius: 25px;
+    margin: 3px;
+    font-weight: bold;
+    transition: background-color .2s linear;
+}
+.themed .pad-key.active,
+.themed .pad-key:active {
+    background-color: #fff;
+    color: #182424;
+}

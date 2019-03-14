@@ -1,18 +1,13 @@
 {
-  "name": "pads",
+  "name": "@brightfish/pads",
   "version": "1.0.0",
   "description": "Dependency-free and lightweight on-screen keyboards",
+  "keywords": ["keyboard", "vanilla-javascript"],
   "main": "dist/pads.min.js",
-  "module": "src/pads.js",
-  "scripts": {
-    "build": "npm run build:js && npm run build:css && npm run copy:docs",
-    "build:js": "rollup -c",
-    "build:css": "cleancss -o dist/base.min.css src/base.css",
-    "watch": "rollup -c -w",
-    "copy:docs": "cp ./dist/pads.min.js ./docs && cp ./dist/base.min.css ./docs"
-  },
-  "author": "Arnaud Coolsaet <a.coolsae@brightfish.be> (https://brightfish.be.org)",
+  "module": "src/Pad.js",
   "license": "GPL-3.0",
+  "author": "Arnaud Coolsaet <a.coolsae@brightfish.be> (https://brightfish.be)",
+  "homepage": "https://github.com/brightfish-be/pads#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/brightfish-be/pads.git"
@@ -20,7 +15,14 @@
   "bugs": {
     "url": "https://github.com/brightfish-be/pads/issues"
   },
-  "homepage": "https://github.com/brightfish-be/pads#readme",
+  "scripts": {
+    "build": "npm run build:js && npm run build:css && npm run copy:docs",
+    "build:js": "rollup -c",
+    "build:css": "cleancss -o dist/base.min.css css/base.css",
+    "watch": "rollup -c -w",
+    "copy:docs": "cp ./dist/pads.min.js ./docs && cp ./dist/base.min.css ./docs"
+  },
+  "dependencies": {},
   "devDependencies": {
     "clean-css-cli": "^4.2.1",
     "rollup": "^0.57.1",

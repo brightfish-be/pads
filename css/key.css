@@ -7,26 +7,23 @@
  |
  */
 
-.key,
+.pad-key,
 .pad-space {
     display: table-cell;
-    text-align: center;
-    line-height: 1.5;
-    font-size: 32px;
-    margin: 3px;
-}
-
-.key div {
-    width: 50px; height: 50px;
-    border: 2px solid #fff;
-    border-radius: 50%;
+    vertical-align: middle;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
 }
-.key.active div,
-.key:active div {
-    background: #fff;
-    color: #182424;
+.pad-key {
+    width: 50px; height: 50px;
+    border-top: 2px solid;
+    border-left: 2px solid;
+    text-align: center;
+    cursor: pointer;
+}
+.pad-key.active,
+.pad-key:active {
+    background-color: rgba(0,0,0,.7);
 }

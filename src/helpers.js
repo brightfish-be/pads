@@ -1,55 +1,17 @@
 export default {
 
-    layouts: {
-        dial : {
-            normal: [
-                [1, 2, 3, 4, 5, 6, 7, 8, 9, 0],
-                ['backspace', 'enter', 'close']
-            ]
-        },
-        email: {
-            normal: [
-                ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
-                ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
-                ['caps', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'backspace'],
-                ['num', '@', '.', 'enter']
-            ],
-            num: [
-                ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
-                ['$', '!', '~', '&', '=', '#', '[', ']'],
-                ['alt', '.', '_', '-', '+', 'backspace'],
-                ['normal', '@', '.', 'enter']
-            ],
-            alt: [
-                ['`', '|', '{', '}', '?', '%', '^', '*', '/', "'"],
-                ['$', '!', '~', '&', '=', '#', '[', ']'],
-                ['num', '.', '_', '-', '+', 'backspace'],
-                ['normal', '@', '.', 'enter']
-            ]
-        },
-        // todo : implement
-        full: null
-    },
-
     /**
-     * Get one of the predefined keyboards with its layouts
-     * @param {string} type
-     * @return {*}
+     * Query an element in the dom
+     * @param {String|Element} el
+     * @return {Element}
      */
-    getKeyboard: function (type) {
-        switch (type) {
-            case 'dial':
-                return this.layouts.dial;
-            case 'email':
-                return this.layouts.email;
-            default:
-                return this.layouts.full;
-        }
+    getElement: function(el) {
+        return !el instanceof HTMLElement ? d.querySelector(el) : el
     },
 
     /**
-     * Wrap an element in a ``div`` with a class attribute
-     * @param {HTMLElement} el
+     * Wrap an element in a `div` with a class attribute
+     * @param {HTMLElement|Node} el
      * @param {string} className
      * @return {Node}
      */
@@ -69,5 +31,21 @@ export default {
      */
     isFn: function (fn) {
         return typeof fn === 'function';
-    }
+    },
+
+    /**
+     *
+     * @param {Element} el
+     * @param name
+     * @param handler
+     * @return {{el: Element, fn: Function, evt: string}}
+     */
+    addEvent: function (el, name, handler) {
+        el.addEventListener(name, handler, true);
+        return {
+            el: el,
+            fn: handler,
+            evt: 'click'
+        }
+    },
 };

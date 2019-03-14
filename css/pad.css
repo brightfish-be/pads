@@ -7,16 +7,18 @@
  |
  */
 
-.pad-keys,
-.pad-keys * {
+.pad-main,
+.pad-main * {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
-.pad-keys {
+.pad-main {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     width: 560px;
     margin: 0 auto;
+    border-right: 2px solid;
+    border-bottom: 2px solid;
 }
 .pad-row {
     display: table;
