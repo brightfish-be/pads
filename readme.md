@@ -8,7 +8,6 @@ defines the layout of the keyboard.
 This is mostly written in ES5 as it was originally coded for touch platforms running older Android browsers. 
 The ES6 parts were either supported by the devices or needed to concatenate the modules with Rollup.  
 <br>
-
 <a href="https://brightfish-be.github.io/pads/" target="_blank" rel="noopener">&rsaquo;_&thinsp;demo</a>
 
 ## Features
@@ -33,10 +32,10 @@ new Pad({
 
 ## Options
 
-- root (null|string|Element) Where to render the keyboard; if omitted the keyboard is appended after the first field. Default: null
-- field (null|string|Element) Field to bind the keyboard to; optional: all fields with .pad-field are eligible. Default: null
-- keyboard (string) Starting keyboard. Default: 'email'
-- layout (string) Starting layout (of the default keyboard). Default: 'normal'
+- **root** `null|string|Element` Where to render the keyboard; if omitted the keyboard is appended after the first field. Default: null
+- **field** `null|string|HTMLInputElement` Field to bind the keyboard to; optional: all fields with .pad-field are eligible. Default: null
+- **keyboard** `string` Starting keyboard. Default: 'email'
+- **layout** `string` Starting layout (of the default keyboard). Default: 'normal'
 
 ## Listening to events & validation
 ```
@@ -118,4 +117,4 @@ Unbind all events and clean up the DOM, optionally empty out the field
 
 
 ## License
-The GNU General Public License (GPL). Please see License File for more information.
+GNU General Public License (GPL). Please see License File for more information.
