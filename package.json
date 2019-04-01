@@ -1,6 +1,6 @@
 {
   "name": "@brightfish/pads",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Dependency-free and lightweight on-screen keyboards for touchscreens",
   "keywords": ["keyboard", "touch", "touchscreen", "vanilla-javascript"],
   "main": "dist/pads.min.js",

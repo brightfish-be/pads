@@ -147,7 +147,7 @@ Pad.prototype = Object.assign({}, keyHelpers, events, {
             html += '<div class="pad-row">';
 
             row.forEach(function (key) {
-                html += key ? self._createKey(key, self.isModifierKey(key)) : self._createKeySpacer();
+                html += key ? self._createKey(key) : self._createKeySpacer();
             });
 
             html += '</div>';
@@ -183,13 +183,43 @@ Pad.prototype = Object.assign({}, keyHelpers, events, {
     /**
      * Create a key
      * @param {String} value
-     * @param {Boolean} isModifier
      * @return {string} HTML
      * @private
      */
-    _createKey: function (value, isModifier) {
-        let className = 'class="pad-key pad-key-' + value + '"';
-        return '<div ' + className + ' aria-label="' + value + '">' + (!isModifier ? value : '') + '</div>';
+    _createKey: function (value) {
+        let attr = this._getKeyAttributes(value),
+            className = 'class="pad-key pad-key-' + attr.name + (attr.mod ? ' pad-key-modifier' : '') + '"';
+
+        return '<div ' + className + ' aria-label="' + attr.name + '" data-value="' + attr.value + '">'
+            + (!attr.mod ? attr.value : '')
+            + '</div>';
+    },
+
+    /**
+     * Parse the key string to define its specifications
+     * @param {String} value
+     * @return {*}
+     * @private
+     */
+    _getKeyAttributes: function (value) {
+        let name = value.toString().match(/\(.+\)??$/);
+
+        if (!name) {
+            return {
+                value: value,
+                name: value,
+                mod: this.isModifierKey(value)
+            };
+        }
+
+        name = name.pop();
+        value = value.replace(name, '');
+
+        return {
+            value: value,
+            name: name.replace(/[()]/g, ''),
+            mod: this.isModifierKey(value)
+        }
     },
 
     /**

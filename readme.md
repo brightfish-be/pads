@@ -1,7 +1,7 @@
 # Pads&mdash;lightweight and dependency-free on-screen keyboards
 
-Out of the box the package contains three keyboards: a plain dial pad, and two iOS like keyboards, one for email fields 
-and one for body copy. Of course one can add custom keyboards and layouts, along with the methods for their function and modifier keys. 
+Out of the box the package contains three keyboards: a plain dial pad, an email keyboard and a simple one 
+for name fields. Of course one can add custom keyboards and layouts, along with the methods for their function and modifier keys. 
 All fields having the `pad-field` class will be linked to the keyboard. Each field's `type` (or `data-pad`) attribute 
 defines the layout of the keyboard.  
 <br>
@@ -14,11 +14,12 @@ The ES6 parts were either supported by the devices or needed to concatenate the 
 
 - Each keyboard can have multiple layouts
 - A single event listener is bound to the keyboard for all keys in all layouts
-- All keys can have a custom click handler
-- The keyboard is linked to a field once the field is in focus
+- All keys *can* have a custom click event handler
+- The keyboard is linked to a field, and adapt its layout, once the field is in focus
 - Ability to cycle through the fields (eg. on `enter` set the focus on the next field)
+- Labelling of non-alphanumeric keys 
 
-## Installation
+## Installation with [npm](https://www.npmjs.com/package/@brightfish/pads)
 ```
 npm i @brightfish/pads
 ```
@@ -58,7 +59,8 @@ new Pad({
 let layouts = {
         alpha: [
             ['a', 'b', 'c', 'custom1'],
-            ['x', 'y', 'z', 'caps', 'num']
+            ['caps', 'x', 'y', 'z', 'num'],
+            ['.(period)', '-(hyphen)', ' (space)']
         ],
         num: [
             [1, 2, 3, 'f3'],

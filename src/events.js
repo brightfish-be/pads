@@ -38,12 +38,12 @@ export default {
     _bindKeys: function (pad) {
         let self = this,
             handler = function (e) {
-                let key = e.target ? e.target.getAttribute('aria-label') : null;
+                let key = e.target ? e.target.getAttribute('data-value') : null;
 
                 e.stopPropagation();
 
                 // spacer elements have no key values
-                if (!key) {
+                if (key === null) {
                     return;
                 }
 
