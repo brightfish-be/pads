@@ -7,12 +7,14 @@ export default {
             ['backspace', '0', 'enter']
         ]
     },
-    name: [
-        ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
-        ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
-        ['caps', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'backspace'],
-        ['&(ampersand)', '-(hyphen)', ' (space)', '.(period)', '’(apostrophe)', 'enter']
-    ],
+    name: {
+        normal: [
+            ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+            ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+            ['caps', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'backspace'],
+            ['&(ampersand)', '-(hyphen)', ' (space)', '.(period)', '’(apostrophe)', 'enter']
+        ]
+    },
     email: {
         normal: [
             ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
